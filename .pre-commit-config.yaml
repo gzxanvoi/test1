@@ -16,7 +16,7 @@ repos:
           - "--profile"
           - "black"  # 对齐black的格式规范，避免冲突
           - "--line-length"
-          - "120"  # 与black的行长度保持一致
+          - "120"
 
   # 3. flake8：PEP8 代码规范检查（发现语法问题、不规范写法）
   - repo: https://github.com/PyCQA/flake8
