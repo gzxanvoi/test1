@@ -1,0 +1,43 @@
+repos:
+  # 1. black：Python 代码自动格式化（主流统一风格）
+  - repo: https://github.com/psf/black
+    rev: 24.8.0  # 稳定版本，兼容大部分Python 3.7+项目
+    hooks:
+      - id: black
+        language_version: python3  # 适配你的本地Python版本，也可指定python3.10等
+        args: ["--line-length", "120"]
+
+  # 2. isort：自动排序导入语句（与black风格兼容）
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2  # 稳定版本
+    hooks:
+      - id: isort
+        args:
+          - "--profile"
+          - "black"  # 对齐black的格式规范，避免冲突
+          - "--line-length"
+          - "120"
+
+  # 3. flake8：PEP8 代码规范检查（发现语法问题、不规范写法）
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.1.1  # 稳定版本
+    hooks:
+      - id: flake8
+        args:
+          - "--max-line-length"
+          - "120"  # 与black、isort保持一致
+          - "--extend-ignore"
+          - "E203,W503"  # 忽略与black冲突的两个检查规则
+        additional_dependencies: [flake8-bugbear]  # 额外增强：发现更多潜在bug
+
+  # 4. 通用文件基础检查（pre-commit 内置钩子）
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0  # 稳定版本
+    hooks:
+      - id: trailing-whitespace  # 清理行尾多余的空格
+      - id: end-of-file-fixer  # 保证文件末尾以一个换行符结尾
+      - id: check-yaml  # 检查YAML文件格式是否合法（避免配置文件语法错误）
+      - id: check-added-large-files  # 禁止提交超大文件，防止仓库体积膨胀
+        args: ["--maxkb=1000"]  # 限制单个文件最大1000KB（1MB）
+      - id: fix-encoding-pragma  # 移除Python文件顶部多余的编码声明（Python 3默认utf-8）
+        args: ["--remove"]
